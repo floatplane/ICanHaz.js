@@ -1,5 +1,5 @@
 /*!
-ICanHaz.js version 0.10.2 -- by @HenrikJoreteg
+ICanHaz.js version 0.11.0 -- by @HenrikJoreteg
 More info at: http://icanhazjs.com
 */
 (function () {
@@ -17,7 +17,7 @@ More info at: http://icanhazjs.com
     var root = this;
 
     var ich = {
-        VERSION: "0.10.2",
+        VERSION: "0.11.0",
         templates: {},
 
         // grab jquery or zepto if it's there
@@ -41,9 +41,10 @@ More info at: http://icanhazjs.com
                 console.error("Template \"" + name + "  \" exists");
             } else {
                 ich.templates[name] = templateString;
+                var compiledTemplate = Mustache.compile(templateString);
                 ich[name] = function (data, raw) {
                     data = data || {};
-                    var result = Mustache.to_html(ich.templates[name], data, ich.templates);
+                    var result = compiledTemplate(data, ich.templates);
                     return (ich.$ && !raw) ? ich.$(trim(result)) : result;
                 };
             }

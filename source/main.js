@@ -36,9 +36,10 @@
                 console.error("Template \"" + name + "  \" exists");
             } else {
                 ich.templates[name] = templateString;
+                var compiledTemplate = Mustache.compile(templateString);
                 ich[name] = function (data, raw) {
                     data = data || {};
-                    var result = Mustache.to_html(ich.templates[name], data, ich.templates);
+                    var result = compiledTemplate(data, ich.templates);
                     return (ich.$ && !raw) ? ich.$(trim(result)) : result;
                 };
             }

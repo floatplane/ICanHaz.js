@@ -16,8 +16,10 @@ $(ICH): $(BASE_FILES)
 	@@echo
 	@@echo "Building" $(ICH) "..."
 	@@cat source/intro.js | sed -e 's/@VERSION@/$(VERSION)/' > $(ICH)
-	@@echo "(function () {" >> $(ICH)
-	@@cat $(BASE_FILES) | sed -e 's/@VERSION@/$(VERSION)/' >> $(ICH)
+	@@echo -e "(function () {\n    var defineMustache = function () {" >> $(ICH)
+	@@cat $(MUSTACHE_FILE) | sed -e 's/^/        /g' >> $(ICH)
+	@@echo -e "    };\n\n    var context = {};\n    var define = {};\n    defineMustache.apply(context);\n\n    var Mustache = context.Mustache;\n" >> $(ICH)
+	@@cat $(MAIN_FILE) | sed -e 's/@VERSION@/$(VERSION)/' | sed -e 's/^/    /g' >> $(ICH)
 	@@echo "})();" >> $(ICH)
 	@@echo $(ICH) "built."
 
